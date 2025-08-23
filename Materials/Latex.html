@@ -1,0 +1,501 @@
+!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide to LaTeX & Overleaf for Law Students</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals (Cream White, Charcoal Text, Muted Sage Green Accent) -->
+    <!-- Application Structure Plan: A single-page app with a fixed left sidebar for navigation and a main content area. The structure is thematic, not linear, using interactive components to break down content: accordions for the 'Burdens', tabs for 'Core Concepts', a CSS-based process flow for the 'AI Workflow', a grid of cards for 'Overleaf Features', an interactive Chart.js visualization for 'Debugging', and distinct info cards for 'Other Applications'. This design prioritizes user-driven exploration over passive reading, making dense information more engaging and digestible. -->
+    <!-- Visualization & Content Choices: Report Info: Top 10 Beginner Errors -> Goal: Organize & Compare frequency/type -> Viz: Horizontal Bar Chart -> Interaction: Clicking a bar displays detailed info (Symptom, Problem, Fix) in an adjacent panel -> Justification: Transforms a static list into an interactive diagnostic tool, making it more engaging and memorable. Library: Chart.js (Canvas). Report Info: AI Workflow -> Goal: Explain a process -> Viz: 3-step diagram -> Interaction: Hover effects on steps -> Justification: Visually represents the sequence, making it easier to understand than plain text. Method: HTML/CSS with Tailwind. All other sections use interactive HTML components (tabs, accordions) to manage information density. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF7;
+            color: #333D42;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Lora', serif;
+        }
+        .sidebar-link {
+            transition: all 0.2s ease-in-out;
+            border-left: 3px solid transparent;
+        }
+        .sidebar-link.active, .sidebar-link:hover {
+            background-color: #E8EAE3;
+            border-left-color: #6A7B59;
+            color: #333D42;
+        }
+        .accordion-header {
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+        }
+        .accordion-content.open {
+            max-height: 500px;
+        }
+        .tab-button.active {
+            background-color: #6A7B59;
+            color: #FFFFFF;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 450px;
+            max-height: 500px;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #E8EAE3;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #C0C5B9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6A7B59;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="flex min-h-screen">
+        <aside class="w-64 bg-[#F5F2EB] p-6 fixed top-0 left-0 h-full hidden lg:block">
+            <h1 class="text-xl font-bold text-[#333D42] mb-8 font-serif">LaTeX for Law</h1>
+            <nav>
+                <ul class="space-y-2">
+                    <li><a href="#part1" class="sidebar-link block w-full text-left px-4 py-2 rounded-r-md text-gray-600">The Pitch</a></li>
+                    <li><a href="#part2" class="sidebar-link block w-full text-left px-4 py-2 rounded-r-md text-gray-600">Core Concepts</a></li>
+                    <li><a href="#part3" class="sidebar-link block w-full text-left px-4 py-2 rounded-r-md text-gray-600">AI Workflow</a></li>
+                    <li><a href="#part4" class="sidebar-link block w-full text-left px-4 py-2 rounded-r-md text-gray-600">Overleaf Platform</a></li>
+                    <li><a href="#part5" class="sidebar-link block w-full text-left px-4 py-2 rounded-r-md text-gray-600">Debugging</a></li>
+                    <li><a href="#part6" class="sidebar-link block w-full text-left px-4 py-2 rounded-r-md text-gray-600">Beyond the Brief</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="lg:ml-64 flex-1 p-6 md:p-10">
+            <div class="max-w-4xl mx-auto">
+                <header class="mb-12 text-center">
+                    <h1 class="text-4xl md:text-5xl font-bold text-[#333D42]">A Law Student's Guide to LaTeX & Overleaf</h1>
+                    <p class="mt-4 text-lg text-gray-600">From Apprehension to Advantage: An Interactive Journey</p>
+                </header>
+
+                <section id="part1" class="mb-16 scroll-mt-20">
+                    <h2 class="text-3xl font-bold mb-6">Part I: The Pitch & The Payoff</h2>
+                    <p class="mb-8 text-gray-700 leading-relaxed">The biggest hurdle in moving from Word to LaTeX isn't technical; it's psychological. It requires reframing your workflow from "what you see is what you get" to "what you mean is what you get." This section addresses the common anxieties and shows how they become advantages. Click each burden to reveal the reframe.</p>
+                    <div id="accordion-container" class="space-y-4">
+                        <div class="accordion-item bg-white rounded-lg shadow-sm border border-gray-200">
+                            <div class="accordion-header p-5 flex justify-between items-center">
+                                <h3 class="font-semibold text-lg">Burden 1: "I need to see the format as I type."</h3>
+                                <span class="transform transition-transform duration-300">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-5 border-t border-gray-200 text-gray-700">
+                                    <h4 class="font-semibold mb-2 text-[#6A7B59]">The Reframe: Focus on Substance, Not Style</h4>
+                                    <p>This separation of content and formatting is LaTeX's core strength. It liberates you from constantly fiddling with fonts and margins, allowing you to focus purely on the substance of your argument. You describe the *structure* of your content (e.g., this is a section, this is a footnote), and let a professional typesetting engine handle the layout. Modern AI workflows also let you draft in Word and convert later, giving you the best of both worlds.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item bg-white rounded-lg shadow-sm border border-gray-200">
+                            <div class="accordion-header p-5 flex justify-between items-center">
+                                <h3 class="font-semibold text-lg">Burden 2: "It looks like coding. It must be hard."</h3>
+                                <span class="transform transition-transform duration-300">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-5 border-t border-gray-200 text-gray-700">
+                                    <h4 class="font-semibold mb-2 text-[#6A7B59]">The Reframe: You're an Editor, Not a Coder</h4>
+                                    <p>This was true 20 years ago. Today, platforms like Overleaf provide a simple web interface with a live preview. More importantly, AI tools can convert your text from Word into clean LaTeX code. Your job becomes one of an editor—pasting the code into Overleaf and refining it. If you can learn Bluebook citations, you can learn to edit basic LaTeX commands.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item bg-white rounded-lg shadow-sm border border-gray-200">
+                            <div class="accordion-header p-5 flex justify-between items-center">
+                                <h3 class="font-semibold text-lg">Burden 3: "My collaborators don't use it."</h3>
+                                <span class="transform transition-transform duration-300">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-5 border-t border-gray-200 text-gray-700">
+                                    <h4 class="font-semibold mb-2 text-[#6A7B59]">The Reframe: Robust, Future-Proof Collaboration</h4>
+                                    <p>Overleaf is built for collaboration, functioning much like Google Docs with real-time editing, comments, and track changes. You simply share a link. Furthermore, because LaTeX files are plain text, they are incredibly robust and immune to the frustrating document corruption that can plague large Word files, ensuring the long-term integrity of your work.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="part2" class="mb-16 scroll-mt-20">
+                    <h2 class="text-3xl font-bold mb-6">Part II: Core Concepts Demystified</h2>
+                    <p class="mb-8 text-gray-700 leading-relaxed">To use LaTeX effectively, you don't need to memorize hundreds of commands. You only need to grasp a few fundamental ideas. This section breaks down the core concepts into interactive tabs. Click each tab to explore a new concept.</p>
+                    <div id="tabs-container">
+                        <div class="flex border-b border-gray-200 mb-4">
+                            <button class="tab-button py-2 px-4 text-gray-600 font-medium rounded-t-md" data-tab="1">Source vs. Output</button>
+                            <button class="tab-button py-2 px-4 text-gray-600 font-medium rounded-t-md" data-tab="2">Commands</button>
+                            <button class="tab-button py-2 px-4 text-gray-600 font-medium rounded-t-md" data-tab="3">Preamble</button>
+                            <button class="tab-button py-2 px-4 text-gray-600 font-medium rounded-t-md" data-tab="4">Environments</button>
+                            <button class="tab-button py-2 px-4 text-gray-600 font-medium rounded-t-md" data-tab="5">Modularity</button>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                            <div id="tab-content-1" class="tab-content">
+                                <h3 class="text-xl font-semibold mb-3">Concept: Source vs. Output</h3>
+                                <p class="mb-4">Your work is split in two: the `.tex` source file (a plain text blueprint where you write) and the compiled `.pdf` output (the finished, beautiful document). You only ever edit the source.</p>
+                                <pre class="bg-gray-100 p-4 rounded-md text-sm"><code class="language-latex">% Your .tex source file (what you write)
+\documentclass{article}
+\begin{document}
+Hello, world!
+\end{document}
+% The .pdf output (what you get) is a formatted document.</code></pre>
+                            </div>
+                            <div id="tab-content-2" class="tab-content hidden">
+                                <h3 class="text-xl font-semibold mb-3">Concept: Commands & Arguments</h3>
+                                <p class="mb-4">Commands are instructions starting with a backslash (`\`). Many take an argument in curly braces (`{}`).</p>
+                                <pre class="bg-gray-100 p-4 rounded-md text-sm"><code class="language-latex">\section{Introduction} % Command: \section, Argument: {Introduction}
+\textit{stare decisis} % Command: \textit, Argument: {stare decisis}
+\footnote{See Marbury v. Madison.} % Command: \footnote</code></pre>
+                            </div>
+                            <div id="tab-content-3" class="tab-content hidden">
+                                <h3 class="text-xl font-semibold mb-3">Concept: Preamble & Body</h3>
+                                <p class="mb-4">The preamble (before `\begin{document}`) sets global rules like document class and packages. The body (between `\begin{document}` and `\end{document}`) contains your actual content.</p>
+                                <pre class="bg-gray-100 p-4 rounded-md text-sm"><code class="language-latex">% --- Preamble ---
+\documentclass{article}
+\usepackage{geometry}
+\geometry{margin=1in}
+\title{My Brief}
+% --- Document Body ---
+\begin{document}
+\maketitle
+The content starts here...
+\end{document}</code></pre>
+                            </div>
+                            <div id="tab-content-4" class="tab-content hidden">
+                                <h3 class="text-xl font-semibold mb-3">Concept: Environments</h3>
+                                <p class="mb-4">Environments apply formatting to entire blocks of text, defined by `\begin{...}` and `\end{...}`.</p>
+                                <pre class="bg-gray-100 p-4 rounded-md text-sm"><code class="language-latex">\begin{quote}
+This entire block will be indented as a quote.
+\end{quote}
+
+\begin{itemize}
+    \item This creates a bulleted list.
+    \item Each item starts with \verb|\item|.
+\end{itemize}</code></pre>
+                            </div>
+                             <div id="tab-content-5" class="tab-content hidden">
+                                <h3 class="text-xl font-semibold mb-3">Concept: Modularity</h3>
+                                <p class="mb-4">For large projects, split your work into multiple `.tex` files (e.g., `introduction.tex`, `argument.tex`) and assemble them in a master file using the `\input{}` command. This keeps your project organized.</p>
+                                <pre class="bg-gray-100 p-4 rounded-md text-sm"><code class="language-latex">% In your main master.tex file
+\begin{document}
+\input{introduction.tex}
+\input{argument.tex}
+\input{conclusion.tex}
+\end{document}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="part3" class="mb-16 scroll-mt-20">
+                    <h2 class="text-3xl font-bold mb-6">Part III: The AI-Assisted Hybrid Workflow</h2>
+                    <p class="mb-8 text-gray-700 leading-relaxed">You don't have to start in LaTeX. The most powerful way to begin is by leveraging your existing skills and using AI as your personal conversion assistant. This revolutionary workflow separates the creative act of writing from the technical act of formatting.</p>
+                    <div class="flex flex-col md:flex-row justify-between items-center space-y-8 md:space-y-0 md:space-x-4">
+                        <div class="text-center p-6 bg-white rounded-lg shadow-sm border border-gray-200 flex-1">
+                            <div class="text-4xl mb-4">✍️</div>
+                            <h3 class="text-xl font-semibold mb-2">1. Write</h3>
+                            <p>Draft your content in your comfort zone—Microsoft Word or Google Docs. Focus entirely on substance, using basic styling.</p>
+                        </div>
+                        <div class="text-2xl text-gray-400 font-sans">→</div>
+                        <div class="text-center p-6 bg-white rounded-lg shadow-sm border border-gray-200 flex-1">
+                            <div class="text-4xl mb-4">🤖</div>
+                            <h3 class="text-xl font-semibold mb-2">2. Convert</h3>
+                            <p>Paste your draft into an AI model and ask it to convert the text to well-structured LaTeX code.</p>
+                        </div>
+                        <div class="text-2xl text-gray-400 font-sans">→</div>
+                        <div class="text-center p-6 bg-white rounded-lg shadow-sm border border-gray-200 flex-1">
+                            <div class="text-4xl mb-4">✨</div>
+                            <h3 class="text-xl font-semibold mb-2">3. Refine</h3>
+                            <p>Paste the AI-generated code into Overleaf. Review the professionally typeset result and make final adjustments.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="part4" class="mb-16 scroll-mt-20">
+                    <h2 class="text-3xl font-bold mb-6">Part IV: The Overleaf Platform</h2>
+                     <p class="mb-8 text-gray-700 leading-relaxed">Overleaf is the modern, cloud-based platform that makes LaTeX practical and accessible for everyone. It removes the technical hurdles and adds the collaborative features you expect from modern software.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                            <h3 class="font-semibold text-lg mb-2">🖥️ Two-Pane Editor</h3>
+                            <p class="text-gray-700">See your LaTeX source on the left and a live PDF preview on the right. This instant feedback loop makes learning intuitive.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                            <h3 class="font-semibold text-lg mb-2">☁️ Nothing to Install</h3>
+                            <p class="text-gray-700">Overleaf runs a full, up-to-date LaTeX distribution on its servers. Your document compiles identically on any computer.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                            <h3 class="font-semibold text-lg mb-2">📄 Rich Template Gallery</h3>
+                            <p class="text-gray-700">Start with a professionally designed template for law review articles, briefs, résumés, and more. Just replace the placeholder text.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                            <h3 class="font-semibold text-lg mb-2">🤝 Real-Time Collaboration</h3>
+                            <p class="text-gray-700">Work with others just like in Google Docs, with shared links, live cursors, track changes, and comments.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="part5" class="mb-16 scroll-mt-20">
+                    <h2 class="text-3xl font-bold mb-6">Part V: Your Debugging First-Aid Kit</h2>
+                    <p class="mb-8 text-gray-700 leading-relaxed">Seeing a red error message is a normal part of the process. This section provides an interactive guide to the most common beginner errors. Your most powerful tool is your AI assistant, which has likely seen your exact problem thousands of times. Click on an error in the chart to see the diagnosis and fix.</p>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 flex flex-col md:flex-row gap-6">
+                        <div class="md:w-1/2">
+                            <div class="chart-container h-[450px]">
+                                <canvas id="errorsChart"></canvas>
+                            </div>
+                        </div>
+                        <div id="error-details" class="md:w-1/2 p-4 bg-gray-50 rounded-md">
+                            <h3 class="text-lg font-semibold mb-4 text-gray-800">Error Details</h3>
+                            <p class="text-gray-600">Click on a bar in the chart to see details about a specific error, including its symptoms, the problematic code, and how to fix it.</p>
+                        </div>
+                    </div>
+                     <div class="mt-8 p-6 bg-[#E8EAE3] rounded-lg">
+                        <h3 class="font-semibold text-lg mb-2 text-[#333D42]">A Note on the "Overfull \hbox" Warning</h3>
+                        <p class="text-gray-700">You will often see this yellow warning (not a red error). It's just LaTeX telling you a line of text is slightly too long for the margin (often due to a URL or long word). For drafts, you can almost always ignore it. For final versions, you can rephrase the sentence or use the `url` package to fix it.</p>
+                    </div>
+                </section>
+
+                <section id="part6" class="mb-16 scroll-mt-20">
+                    <h2 class="text-3xl font-bold mb-6">Part VI: Beyond the Brief</h2>
+                    <p class="mb-8 text-gray-700 leading-relaxed">Once you're comfortable with the basics, the LaTeX ecosystem can do much more than write papers. Because your content is structured plain text, it can be easily repurposed for other professional communication tasks.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                         <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                            <h3 class="font-semibold text-lg mb-2">📽️ Professional Presentations with Beamer</h3>
+                            <p class="text-gray-700 mb-4">Beamer is the LaTeX equivalent of PowerPoint. It lets you create clean, professional slideshows with the same high-quality typography as your papers. It's perfect for moot court arguments or conference presentations.</p>
+                            <a href="https://www.overleaf.com/gallery/tagged/beamer" target="_blank" class="font-medium text-[#6A7B59] hover:underline">Explore Beamer Templates →</a>
+                        </div>
+                         <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                            <h3 class="font-semibold text-lg mb-2">🔄 The Universal Translator: Pandoc</h3>
+                            <p class="text-gray-700 mb-4">Pandoc is a powerful command-line tool that converts between dozens of formats. You can write in LaTeX and easily convert your work to Word (`.docx`), HTML, Markdown, and more, ensuring your work is never locked into a single format.</p>
+                             <a href="https://pandoc.org/" target="_blank" class="font-medium text-[#6A7B59] hover:underline">Learn about Pandoc →</a>
+                        </div>
+                    </div>
+                </section>
+                
+                <footer class="text-center mt-16 pt-8 border-t border-gray-200">
+                    <p class="text-gray-500">This interactive guide was created to empower law students with modern, professional documentation tools.</p>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const accordionContainer = document.getElementById('accordion-container');
+    if (accordionContainer) {
+        accordionContainer.addEventListener('click', (e) => {
+            const header = e.target.closest('.accordion-header');
+            if (header) {
+                const content = header.nextElementSibling;
+                const icon = header.querySelector('span');
+                
+                content.classList.toggle('open');
+                if (content.classList.contains('open')) {
+                    icon.style.transform = 'rotate(180deg)';
+                } else {
+                    icon.style.transform = 'rotate(0deg)';
+                }
+            }
+        });
+    }
+
+    const tabsContainer = document.getElementById('tabs-container');
+    if(tabsContainer) {
+        const tabButtons = tabsContainer.querySelectorAll('.tab-button');
+        const tabContents = tabsContainer.querySelectorAll('.tab-content');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tab = button.dataset.tab;
+                
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                tabContents.forEach(content => {
+                    if (content.id === `tab-content-${tab}`) {
+                        content.classList.remove('hidden');
+                    } else {
+                        content.classList.add('hidden');
+                    }
+                });
+            });
+        });
+        tabButtons[0].click();
+    }
+
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.sidebar-link');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+                });
+            }
+        });
+    }, { rootMargin: "-50% 0px -50% 0px" });
+    sections.forEach(section => observer.observe(section));
+
+    const errorData = [
+        {
+            name: "Missing '}'",
+            symptom: "Formatting goes haywire; 'Runaway argument?' error.",
+            problem: "`\\textit{This is an example`",
+            fix: "`\\textit{This is an example}`"
+        },
+        {
+            name: "Unescaped Special Character",
+            symptom: "Strange errors or characters like '&' or '%' don't appear.",
+            problem: "`AT&T`",
+            fix: "`AT\\&T` (prefix special characters with `\\`)"
+        },
+        {
+            name: "Misspelled Command",
+            symptom: "'Undefined control sequence' error.",
+            problem: "`\\secion{My Title}`",
+            fix: "`\\section{My Title}`"
+        },
+        {
+            name: "Missing Package",
+            symptom: "'Undefined control sequence' for a valid command.",
+            problem: "Using `\\includegraphics` without `\\usepackage{graphicx}` in the preamble.",
+            fix: "Add the required `\\usepackage{...}` to the preamble."
+        },
+        {
+            name: "Math Outside Math Mode",
+            symptom: "'Missing $ inserted' error.",
+            problem: "`The variable _x_ is important.`",
+            fix: "Use `\\textit{x}` for text italics or `$x$` for math."
+        },
+        {
+            name: "File Not Found",
+            symptom: "Error when including an image or file.",
+            problem: "`\\includegraphics{Image.PNG}` when file is `image.png`.",
+            fix: "Ensure exact file name, including case and extension."
+        },
+        {
+            name: "Text After \\end{document}",
+            symptom: "'Extra \\endgroup' or similar errors.",
+            problem: "Any text, even a space, after the final `\\end{document}`.",
+            fix: "Delete everything after `\\end{document}`."
+        },
+        {
+            name: "maketitle Without Title",
+            symptom: "Error about missing commands.",
+            problem: "Using `\\maketitle` without defining `\\title{...}` in preamble.",
+            fix: "Define `\\title`, `\\author`, etc. in the preamble."
+        },
+        {
+            name: "Incorrect List Item",
+            symptom: "Errors inside a list environment.",
+            problem: "Using `*` or `-` instead of `\\item`.",
+            fix: "Every list entry must start with `\\item`."
+        },
+        {
+            name: "Paragraph Ended Early",
+            symptom: "'Runaway argument?' error.",
+            problem: "A command like `\\footnote` is missing its closing `}`.",
+            fix: "Find the command and ensure its argument is enclosed in `{}`."
+        }
+    ];
+
+    const errorDetailsContainer = document.getElementById('error-details');
+    const ctx = document.getElementById('errorsChart');
+    if (ctx) {
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: errorData.map(e => e.name),
+                datasets: [{
+                    label: 'Common Beginner Errors',
+                    data: Array(errorData.length).fill(10),
+                    backgroundColor: '#E8EAE3',
+                    borderColor: '#6A7B59',
+                    borderWidth: 1,
+                    hoverBackgroundColor: '#6A7B59',
+                    hoverBorderColor: '#333D42'
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Click an Error to See Details',
+                        font: {
+                            family: "'Lora', serif",
+                            size: 16
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        display: false
+                    },
+                    y: {
+                        ticks: {
+                            font: {
+                                size: 12,
+                                family: "'Inter', sans-serif"
+                            }
+                        }
+                    }
+                },
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const index = elements[0].index;
+                        const data = errorData[index];
+                        
+                        errorDetailsContainer.innerHTML = `
+                            <h3 class="text-lg font-semibold mb-2 text-gray-800">${data.name}</h3>
+                            <div class="space-y-3 text-sm">
+                                <div>
+                                    <h4 class="font-medium text-gray-600">Symptom:</h4>
+                                    <p class="text-gray-700">${data.symptom}</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-600">Problem Code:</h4>
+                                    <pre class="bg-red-100 text-red-800 p-2 rounded-md text-xs"><code>${data.problem}</code></pre>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-600">The Fix:</h4>
+                                     <pre class="bg-green-100 text-green-800 p-2 rounded-md text-xs"><code>${data.fix}</code></pre>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
